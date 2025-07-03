@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Pengajuan Cuti</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+      color: #333;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .thank-you {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="cutiForm">
+      <h2>Form Pengajuan Cuti</h2>
+
+      <label for="nama">Nama Pegawai</label>
+      <input type="text" id="nama" name="nama" required>
+
+      <label for="tgl_pengajuan">Tanggal Pengajuan</label>
+      <input type="date" id="tgl_pengajuan" name="tgl_pengajuan" required>
+
+      <label for="tgl_mulai">Tanggal Mulai</label>
+      <input type="date" id="tgl_mulai" name="tgl_mulai" required>
+
+      <label for="tgl_selesai">Tanggal Selesai</label>
+      <input type="date" id="tgl_selesai" name="tgl_selesai" required>
+
+      <label for="jenis_cuti">Jenis Cuti</label>
+      <select id="jenis_cuti" name="jenis_cuti" required>
+        <option value="">--Pilih Jenis Cuti--</option>
+        <option value="Tahunan">Cuti Tahunan</option>
+        <option value="Sakit">Cuti Sakit</option>
+        <option value="Melahirkan">Cuti Melahirkan</option>
+        <option value="Penting">Cuti Penting</option>
+        <option value="Di Luar Tanggungan Negara">Cuti di Luar Tanggungan Negara</option>
+      </select>
+
+      <label for="jumlah_cuti">Jumlah Cuti (hari)</label>
+      <input type="number" id="jumlah_cuti" name="jumlah_cuti" min="1" required>
+
+      <label for="waktu">Waktu</label>
+      <select id="waktu" name="waktu" required>
+        <option value="">--Pilih Waktu--</option>
+        <option value="Hari">Hari</option>
+        <option value="Bulan">Bulan</option>
+      </select>
+
+      <label for="alasan">Alasan</label>
+      <textarea id="alasan" name="alasan" rows="3" required></textarea>
+
+      <label for="alamat">Alamat Selama Cuti</label>
+      <textarea id="alamat" name="alamat" rows="2" required></textarea>
+
+      <label for="no_telp">No. Telepon <small>(Contoh: 081234567890)</small></label>
+      <input type="tel" id="no_telp" name="no_telp" placeholder="081234567890" required>
+
+      <button type="submit">Kirim Pengajuan</button>
+    </form>
+    <div class="thank-you" id="thankYouMessage">
+      Terima kasih, pengajuan Anda akan segera kami proses.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('cutiForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = {
+        nama: document.getElementById('nama').value,
+        tgl_pengajuan: document.getElementById('tgl_pengajuan').value,
+        tgl_mulai: document.getElementById('tgl_mulai').value,
+        tgl_selesai: document.getElementById('tgl_selesai').value,
+        jenis_cuti: document.getElementById('jenis_cuti').value,
+        jumlah_cuti: document.getElementById('jumlah_cuti').value,
+        waktu: document.getElementById('waktu').value,
+        alasan: document.getElementById('alasan').value,
+        alamat: document.getElementById('alamat').value,
+        no_telp: document.getElementById('no_telp').value,
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbwf8UwLDMaT0UH7LVDtlukAqpmT71BQtZvOji_BmR783VczQ1en_v5YTC6VX9vkuPVDmQ/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(response => response.json())
+      .then(responseData => {
+        if (responseData.status === 'success') {
+          document.getElementById('cutiForm').style.display = 'none';
+          document.getElementById('thankYouMessage').style.display = 'block';
+        } else {
+          alert('Terjadi kesalahan. Coba lagi nanti.');
+        }
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert('Gagal mengirim data. Coba lagi nanti.');
+      });
+    });
+  </script>
+</body>
+</html>
